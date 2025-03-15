@@ -114,8 +114,8 @@ function handlePurchase(event) {
     buyer: buyer
   };
   
-  // Send orderData to your server endpoint
-  fetch('/api/order', {
+  // Send orderData to your server endpoint using an absolute URL.
+  fetch('https://your-backend.onrender.com/api/order', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -141,8 +141,8 @@ function sendContactMessage(event) {
     message: document.getElementById('contact-message').value
   };
   
-  // Send contactData to your server endpoint
-  fetch('/api/contact', {
+  // Send contactData to your server endpoint using an absolute URL.
+  fetch('https://your-backend.onrender.com/api/contact', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -192,7 +192,7 @@ document.querySelectorAll('input[name="payment"]').forEach(radio => {
 });
 
 // Call updatePaymentInstructions initially if element exists
-if(document.getElementById('payment-instructions')) {
+if (document.getElementById('payment-instructions')) {
   updatePaymentInstructions();
 }
 
