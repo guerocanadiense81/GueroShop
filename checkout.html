@@ -21,48 +21,54 @@
     <form id="checkout-form" onsubmit="handlePurchase(event)">
       <h2>Order Summary</h2>
       <div id="order-details">
-        <!-- Order details will be injected here via JavaScript -->
+        <!-- Order details will be populated here via main.js -->
       </div>
       
       <h2>Shipping Information</h2>
       <label for="name">Full Name:</label>
       <input type="text" id="name" name="name" required />
-
+      
       <label for="email">Email Address:</label>
       <input type="email" id="email" name="email" required />
-
+      
       <label for="phone">Phone Number:</label>
       <input type="tel" id="phone" name="phone" required />
-
+      
       <label for="address">Shipping Address:</label>
       <textarea id="address" name="address" required></textarea>
-
+      
       <h2>Payment Options</h2>
       <p>Please select your payment method:</p>
       <div>
         <input type="radio" id="interac" name="payment" value="interac" checked />
-        <label for="interac">Interac Email Transfer (send to your-email@example.com)</label>
+        <label for="interac">Interac Email Transfer</label>
       </div>
       <div>
         <input type="radio" id="btc" name="payment" value="btc" />
-        <label for="btc">Bitcoin (BTC) - <span id="btc-rate"></span> (send to BTC_ADDRESS_HERE)</label>
+        <label for="btc">Bitcoin (BTC) - <span id="btc-rate"></span></label>
       </div>
       <div>
         <input type="radio" id="monero" name="payment" value="monero" />
-        <label for="monero">Monero - <span id="monero-rate"></span> (send to MONERO_ADDRESS_HERE)</label>
+        <label for="monero">Monero - <span id="monero-rate"></span></label>
       </div>
       <div>
         <input type="radio" id="bnb" name="payment" value="bnb" />
-        <label for="bnb">Binance Coin (BNB) - <span id="bnb-rate"></span> (send to BNB_ADDRESS_HERE)</label>
+        <label for="bnb">Binance Coin (BNB) - <span id="bnb-rate"></span></label>
       </div>
       <div>
         <input type="radio" id="usdt" name="payment" value="usdt" />
-        <label for="usdt">Tether (USDT) - <span id="usdt-rate"></span> (send to USDT_ADDRESS_HERE)</label>
+        <label for="usdt">Tether (USDT) - <span id="usdt-rate"></span></label>
+      </div>
+      <div>
+        <input type="radio" id="eth" name="payment" value="eth" />
+        <label for="eth">Ethereum (ETH) - <span id="eth-rate"></span></label>
+      </div>
+      <div>
+        <input type="radio" id="doge" name="payment" value="doge" />
+        <label for="doge">Dogecoin (DOGE) - <span id="doge-rate"></span></label>
       </div>
       
-      <p id="payment-instructions">
-        <!-- Payment instructions will be shown based on the selected method -->
-      </p>
+      <p id="payment-instructions"></p>
       
       <button type="submit">Purchase Now</button>
     </form>
@@ -71,7 +77,7 @@
   <footer>
     <p>&copy; 2025 Guero's Shop</p>
   </footer>
-
+  
   <script src="js/main.js"></script>
 </body>
 </html>
