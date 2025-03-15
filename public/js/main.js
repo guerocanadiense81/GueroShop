@@ -1,16 +1,28 @@
 /* main.js */
 
-// Sample product data for 20 items
-const products = [];
-for (let i = 1; i <= 20; i++) {
-  products.push({
-    id: i,
-    name: `Item ${i}`,
-    description: `Description for item ${i}.`,
-    price: (10 + i).toFixed(2), // example pricing
-    image: 'images/product-placeholder.png'
-  });
-}
+// Define your products with individually specified details (example for 20 items)
+const products = [
+  { id: 1, name: "Item 1", description: "Description for item 1.", price: "11.00", image: "images/item1.png" },
+  { id: 2, name: "Item 2", description: "Description for item 2.", price: "12.00", image: "images/item2.png" },
+  { id: 3, name: "Item 3", description: "Description for item 3.", price: "13.00", image: "images/item3.png" },
+  { id: 4, name: "Item 4", description: "Description for item 4.", price: "14.00", image: "images/item4.png" },
+  { id: 5, name: "Item 5", description: "Description for item 5.", price: "15.00", image: "images/item5.png" },
+  { id: 6, name: "Item 6", description: "Description for item 6.", price: "16.00", image: "images/item6.png" },
+  { id: 7, name: "Item 7", description: "Description for item 7.", price: "17.00", image: "images/item7.png" },
+  { id: 8, name: "Item 8", description: "Description for item 8.", price: "18.00", image: "images/item8.png" },
+  { id: 9, name: "Item 9", description: "Description for item 9.", price: "19.00", image: "images/item9.png" },
+  { id: 10, name: "Item 10", description: "Description for item 10.", price: "20.00", image: "images/item10.png" },
+  { id: 11, name: "Item 11", description: "Description for item 11.", price: "21.00", image: "images/item11.png" },
+  { id: 12, name: "Item 12", description: "Description for item 12.", price: "22.00", image: "images/item12.png" },
+  { id: 13, name: "Item 13", description: "Description for item 13.", price: "23.00", image: "images/item13.png" },
+  { id: 14, name: "Item 14", description: "Description for item 14.", price: "24.00", image: "images/item14.png" },
+  { id: 15, name: "Item 15", description: "Description for item 15.", price: "25.00", image: "images/item15.png" },
+  { id: 16, name: "Item 16", description: "Description for item 16.", price: "26.00", image: "images/item16.png" },
+  { id: 17, name: "Item 17", description: "Description for item 17.", price: "27.00", image: "images/item17.png" },
+  { id: 18, name: "Item 18", description: "Description for item 18.", price: "28.00", image: "images/item18.png" },
+  { id: 19, name: "Item 19", description: "Description for item 19.", price: "29.00", image: "images/item19.png" },
+  { id: 20, name: "Item 20", description: "Description for item 20.", price: "30.00", image: "images/item20.png" }
+];
 
 // Function to dynamically populate products on index.html
 function populateProducts() {
@@ -69,13 +81,15 @@ function populateOrderDetails() {
 
 // Function to fetch live crypto conversion rates using Coingecko API
 function fetchCryptoRates() {
-  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,monero,binancecoin,tether&vs_currencies=usd')
+  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,monero,binancecoin,tether,ethereum,dogecoin&vs_currencies=usd')
     .then(response => response.json())
     .then(data => {
       document.getElementById('btc-rate').innerText = `$${data.bitcoin.usd}`;
       document.getElementById('monero-rate').innerText = `$${data.monero.usd}`;
       document.getElementById('bnb-rate').innerText = `$${data.binancecoin.usd}`;
       document.getElementById('usdt-rate').innerText = `$${data.tether.usd}`;
+      document.getElementById('eth-rate').innerText = `$${data.ethereum.usd}`;
+      document.getElementById('doge-rate').innerText = `$${data.dogecoin.usd}`;
     })
     .catch(error => console.error('Error fetching crypto rates:', error));
 }
@@ -125,8 +139,10 @@ function handlePurchase(event) {
   .then(response => response.json())
   .then(data => {
     console.log('Order processed:', data);
-    alert(`Order ${orderNumber} created! Please follow the payment instructions sent to your email.`);
-    localStorage.removeItem('order');
+    // Save the complete order data so the confirmation page can display it
+    localStorage.setItem('order', JSON.stringify(orderData));
+    // Redirect to the confirmation page
+    window.location.href = 'confirmation.html';
   })
   .catch(error => console.error('Error processing order:', error));
 }
@@ -179,6 +195,12 @@ function updatePaymentInstructions() {
       break;
     case 'usdt':
       instructionsText = 'Please send your Tether payment to USDT_ADDRESS_HERE. Use the current conversion rate shown above.';
+      break;
+    case 'eth':
+      instructionsText = 'Please send your Ethereum payment to ETH_ADDRESS_HERE. Use the current conversion rate shown above.';
+      break;
+    case 'doge':
+      instructionsText = 'Please send your Dogecoin payment to DOGE_ADDRESS_HERE. Use the current conversion rate shown above.';
       break;
     default:
       instructionsText = '';
