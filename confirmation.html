@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Confirmation - Guero's Shop</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Order Confirmation</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <div id="confirmation-details">
+      <!-- Order details will be loaded here -->
+    </div>
+    <p>A confirmation email with your order details has been sent. Please check your email for further instructions.</p>
+  </main>
+  <footer>
+    <p>&copy; 2025 Guero's Shop</p>
+  </footer>
+  <script>
+    // Load order details from localStorage
+    const order = JSON.parse(localStorage.getItem('order'));
+    const container = document.getElementById('confirmation-details');
+    if (order) {
+      container.innerHTML = `
+        <h2>Order Number: ${order.orderNumber}</h2>
+        <p><strong>Product:</strong> ${order.product.name}</p>
+        <p><strong>Price:</strong> $${order.product.price}</p>
+        <p><strong>Quantity:</strong> ${order.product.quantity}</p>
+        <p><strong>Total:</strong> $${order.product.total}</p>
+        <h3>Buyer Details</h3>
+        <p><strong>Name:</strong> ${order.buyer.name}</p>
+        <p><strong>Email:</strong> ${order.buyer.email}</p>
+        <p><strong>Phone:</strong> ${order.buyer.phone}</p>
+        <p><strong>Address:</strong> ${order.buyer.address}</p>
+        <p><strong>Payment Method:</strong> ${order.buyer.paymentMethod}</p>
+      `;
+      // Optionally, remove order data from localStorage after displaying
+      localStorage.removeItem('order');
+    } else {
+      container.innerHTML = '<p>No order details found.</p>';
+    }
+  </script>
+</body>
+</html>
