@@ -114,8 +114,8 @@ function handlePurchase(event) {
     buyer: buyer
   };
   
-  // Send orderData to your server endpoint using an absolute URL.
-  fetch('https://your-backend.onrender.com/api/order', {
+  // Send orderData to your backend endpoint with absolute URL
+  fetch('https://gueroshop.onrender.com/api/order', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -141,8 +141,8 @@ function sendContactMessage(event) {
     message: document.getElementById('contact-message').value
   };
   
-  // Send contactData to your server endpoint using an absolute URL.
-  fetch('https://your-backend.onrender.com/api/contact', {
+  // Send contactData to your backend endpoint with absolute URL
+  fetch('https://gueroshop.onrender.com/api/contact', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
