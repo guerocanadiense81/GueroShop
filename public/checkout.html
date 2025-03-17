@@ -21,22 +21,22 @@
     <form id="checkout-form" onsubmit="handlePurchase(event)">
       <h2>Order Summary</h2>
       <div id="order-details">
-        <!-- Order details will be populated via main.js -->
+        <!-- Order summary will be populated here via JavaScript -->
       </div>
       
       <h2>Shipping Information</h2>
       <label for="name">Full Name:</label>
       <input type="text" id="name" name="name" required />
-
+      
       <label for="email">Email Address:</label>
       <input type="email" id="email" name="email" required />
-
+      
       <label for="phone">Phone Number:</label>
       <input type="tel" id="phone" name="phone" required />
-
+      
       <label for="address">Shipping Address:</label>
       <textarea id="address" name="address" required></textarea>
-
+      
       <h2>Payment Options</h2>
       <p>Please select your payment method:</p>
       <div>
@@ -68,14 +68,6 @@
         <label for="doge">Dogecoin (DOGE) - <span id="doge-rate"></span></label>
       </div>
       
-      <!-- Crypto Conversion Section -->
-      <div id="crypto-conversion" style="display:none; margin-top: 10px;">
-        <p>
-          Total in Crypto: <strong><span id="crypto-total"></span></strong>
-          <span id="crypto-currency"></span>
-        </p>
-      </div>
-      
       <p id="payment-instructions"></p>
       
       <button type="submit">Purchase Now</button>
@@ -85,45 +77,42 @@
   <footer>
     <p>&copy; 2025 Guero's Shop</p>
   </footer>
-
-  <!-- Main JS file -->
+  
   <script src="js/main.js"></script>
   <script>
-    // This function updates the crypto conversion display if a crypto payment method is selected.
-    function updateCryptoDisplay() {
-      const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-      const conversionDiv = document.getElementById('crypto-conversion');
-      // Only show conversion if a crypto option is selected
-      if (['btc', 'monero', 'bnb', 'usdt', 'eth', 'doge'].includes(paymentMethod)) {
-        const rateElement = document.getElementById(paymentMethod + '-rate');
-        if (rateElement) {
-          // Extract conversion rate (e.g., "$40000")
-          const rateText = rateElement.innerText;
-          const usdRate = parseFloat(rateText.replace('$', ''));
-          // Retrieve order details from localStorage (assumes order.total holds the dollar total)
-          const order = JSON.parse(localStorage.getItem('order'));
-          if (order && order.total) {
-            const dollarTotal = parseFloat(order.total);
-            if (usdRate && dollarTotal) {
-              const cryptoTotal = (dollarTotal / usdRate).toFixed(6);
-              conversionDiv.style.display = 'block';
-              document.getElementById('crypto-total').innerText = cryptoTotal;
-              document.getElementById('crypto-currency').innerText = paymentMethod.toUpperCase();
-              return;
-            }
+    // Function to update order summary with crypto total if a crypto payment method is selected.
+    function updateOrderSummary() {
+      const order = JSON.parse(localStorage.getItem('order'));
+      if (!order) return;
+      let cryptoLine = '';
+      // If buyer details are set (payment method selected later on checkout)
+      if (order.buyer && ['btc', 'monero', 'bnb', 'usdt', 'eth', 'doge'].includes(order.buyer.paymentMethod)) {
+        const rateEl = document.getElementById(order.buyer.paymentMethod + '-rate');
+        if (rateEl) {
+          const rateText = rateEl.innerText; // e.g. "$40000"
+          const usdRate = parseFloat(rateText.replace('$',''));
+          const dollarTotal = parseFloat(order.total);
+          if (usdRate && dollarTotal) {
+            const cryptoTotal = (dollarTotal / usdRate).toFixed(6);
+            cryptoLine = `<p><strong>Total in ${order.buyer.paymentMethod.toUpperCase()}:</strong> ${cryptoTotal}</p>`;
+            // Optionally update order object with crypto total
+            order.cryptoTotal = cryptoTotal;
+            localStorage.setItem('order', JSON.stringify(order));
           }
         }
       }
-      conversionDiv.style.display = 'none';
+      const summaryDiv = document.getElementById('order-details');
+      summaryDiv.innerHTML = `
+        <p><strong>Product:</strong> ${order.name}</p>
+        <p><strong>Price (USD):</strong> $${order.price}</p>
+        <p><strong>Quantity:</strong> ${order.quantity}</p>
+        <p><strong>Total (USD):</strong> $${order.total}</p>
+        ${cryptoLine}
+      `;
     }
 
-    // Attach event listener to all payment radio buttons to update crypto display on change
-    document.querySelectorAll('input[name="payment"]').forEach(radio => {
-      radio.addEventListener('change', updateCryptoDisplay);
-    });
-
-    // Optionally, call updateCryptoDisplay on page load
-    updateCryptoDisplay();
+    // Optionally, update the order summary on page load and when payment method changes.
+    updateOrderSummary();
   </script>
 </body>
 </html>
