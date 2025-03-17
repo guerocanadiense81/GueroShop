@@ -1,56 +1,30 @@
 /* main.js */
 
-// ----- PRODUCTS & GLOBAL SETTINGS -----
+// Define 20 products with individually specified details, including a shippingCost for each.
 const products = [
-  { id: 1, name: "Item 1", description: "Description for item 1.", price: "11.00", image: "images/item1.png" },
-  { id: 2, name: "Item 2", description: "Description for item 2.", price: "12.00", image: "images/item2.png" },
-  { id: 3, name: "Item 3", description: "Description for item 3.", price: "13.00", image: "images/item3.png" },
-  { id: 4, name: "Item 4", description: "Description for item 4.", price: "14.00", image: "images/item4.png" },
-  { id: 5, name: "Item 5", description: "Description for item 5.", price: "15.00", image: "images/item5.png" },
-  { id: 6, name: "Item 6", description: "Description for item 6.", price: "16.00", image: "images/item6.png" },
-  { id: 7, name: "Item 7", description: "Description for item 7.", price: "17.00", image: "images/item7.png" },
-  { id: 8, name: "Item 8", description: "Description for item 8.", price: "18.00", image: "images/item8.png" },
-  { id: 9, name: "Item 9", description: "Description for item 9.", price: "19.00", image: "images/item9.png" },
-  { id: 10, name: "Item 10", description: "Description for item 10.", price: "20.00", image: "images/item10.png" },
-  { id: 11, name: "Item 11", description: "Description for item 11.", price: "21.00", image: "images/item11.png" },
-  { id: 12, name: "Item 12", description: "Description for item 12.", price: "22.00", image: "images/item12.png" },
-  { id: 13, name: "Item 13", description: "Description for item 13.", price: "23.00", image: "images/item13.png" },
-  { id: 14, name: "Item 14", description: "Description for item 14.", price: "24.00", image: "images/item14.png" },
-  { id: 15, name: "Item 15", description: "Description for item 15.", price: "25.00", image: "images/item15.png" },
-  { id: 16, name: "Item 16", description: "Description for item 16.", price: "26.00", image: "images/item16.png" },
-  { id: 17, name: "Item 17", description: "Description for item 17.", price: "27.00", image: "images/item17.png" },
-  { id: 18, name: "Item 18", description: "Description for item 18.", price: "28.00", image: "images/item18.png" },
-  { id: 19, name: "Item 19", description: "Description for item 19.", price: "29.00", image: "images/item19.png" },
-  { id: 20, name: "Item 20", description: "Description for item 20.", price: "30.00", image: "images/item20.png" }
+  { id: 1, name: "Item 1", description: "Description for item 1.", price: "11.00", image: "images/item1.png", shippingCost: 3.00 },
+  { id: 2, name: "Item 2", description: "Description for item 2.", price: "12.00", image: "images/item2.png", shippingCost: 4.00 },
+  { id: 3, name: "Item 3", description: "Description for item 3.", price: "13.00", image: "images/item3.png", shippingCost: 3.50 },
+  { id: 4, name: "Item 4", description: "Description for item 4.", price: "14.00", image: "images/item4.png", shippingCost: 5.00 },
+  { id: 5, name: "Item 5", description: "Description for item 5.", price: "15.00", image: "images/item5.png", shippingCost: 4.50 },
+  { id: 6, name: "Item 6", description: "Description for item 6.", price: "16.00", image: "images/item6.png", shippingCost: 3.75 },
+  { id: 7, name: "Item 7", description: "Description for item 7.", price: "17.00", image: "images/item7.png", shippingCost: 4.25 },
+  { id: 8, name: "Item 8", description: "Description for item 8.", price: "18.00", image: "images/item8.png", shippingCost: 5.00 },
+  { id: 9, name: "Item 9", description: "Description for item 9.", price: "19.00", image: "images/item9.png", shippingCost: 3.00 },
+  { id: 10, name: "Item 10", description: "Description for item 10.", price: "20.00", image: "images/item10.png", shippingCost: 4.00 },
+  { id: 11, name: "Item 11", description: "Description for item 11.", price: "21.00", image: "images/item11.png", shippingCost: 3.50 },
+  { id: 12, name: "Item 12", description: "Description for item 12.", price: "22.00", image: "images/item12.png", shippingCost: 4.50 },
+  { id: 13, name: "Item 13", description: "Description for item 13.", price: "23.00", image: "images/item13.png", shippingCost: 5.00 },
+  { id: 14, name: "Item 14", description: "Description for item 14.", price: "24.00", image: "images/item14.png", shippingCost: 4.25 },
+  { id: 15, name: "Item 15", description: "Description for item 15.", price: "25.00", image: "images/item15.png", shippingCost: 3.75 },
+  { id: 16, name: "Item 16", description: "Description for item 16.", price: "26.00", image: "images/item16.png", shippingCost: 4.00 },
+  { id: 17, name: "Item 17", description: "Description for item 17.", price: "27.00", image: "images/item17.png", shippingCost: 3.50 },
+  { id: 18, name: "Item 18", description: "Description for item 18.", price: "28.00", image: "images/item18.png", shippingCost: 5.00 },
+  { id: 19, name: "Item 19", description: "Description for item 19.", price: "29.00", image: "images/item19.png", shippingCost: 4.25 },
+  { id: 20, name: "Item 20", description: "Description for item 20.", price: "30.00", image: "images/item20.png", shippingCost: 3.75 }
 ];
 
-// Global shipping cost per item in USD (placeholder value)
-const SHIPPING_COST_PER_ITEM = 5.00;
-
-// Mapping for crypto currency codes
-const cryptoNames = {
-  btc: "BTC",
-  monero: "XMR",
-  bnb: "BNB",
-  usdt: "USDT",
-  eth: "ETH",
-  doge: "DOGE"
-};
-
-// Mapping for payment instructions for each method (including Interac)
-const paymentInstructions = {
-  interac: "Send your payment via Interac Email Transfer to your-interac@example.com and include your order number in the message.",
-  btc: "Send your Bitcoin payment to YOUR_BITCOIN_ADDRESS_PLACEHOLDER.",
-  monero: "Send your Monero payment to YOUR_MONERO_ADDRESS_PLACEHOLDER.",
-  bnb: "Send your Binance Coin payment to YOUR_BNB_ADDRESS_PLACEHOLDER.",
-  usdt: "Send your Tether payment to YOUR_USDT_ADDRESS_PLACEHOLDER.",
-  eth: "Send your Ethereum payment to YOUR_ETH_ADDRESS_PLACEHOLDER.",
-  doge: "Send your Dogecoin payment to YOUR_DOGE_ADDRESS_PLACEHOLDER."
-};
-
 // ----- INDEX PAGE FUNCTIONS -----
-
-// Populates products in the container with class "products"
 function populateProducts() {
   const container = document.querySelector('.products');
   if (!container) return;
@@ -64,6 +38,7 @@ function populateProducts() {
       <h2>${product.name}</h2>
       <p>${product.description}</p>
       <p>Price: $${product.price}</p>
+      <p>Shipping: $${product.shippingCost}</p>
       <p>Quantity: <input type="number" id="qty-${product.id}" value="1" min="1"></p>
       <button onclick="buyNow(${product.id})">Buy Now</button>
     `;
@@ -71,52 +46,58 @@ function populateProducts() {
   });
 }
 
-// When a product is selected, save order details (with subtotal) in localStorage and redirect to checkout.
 function buyNow(productId) {
   const product = products.find(p => p.id === productId);
   if (product) {
     const quantity = document.getElementById(`qty-${product.id}`).value;
     const subtotal = (product.price * quantity).toFixed(2);
-    // Save order details in localStorage.
+    // Save order details in localStorage. (Note: buyer details not yet set)
     localStorage.setItem('order', JSON.stringify({
       productId: product.id,
       name: product.name,
       price: product.price,
       quantity: quantity,
-      total: subtotal
+      total: subtotal,
+      shippingCost: (product.shippingCost * quantity).toFixed(2)
     }));
     window.location.href = 'checkout.html';
   }
 }
 
 // ----- CHECKOUT PAGE FUNCTIONS -----
-
-// Populates the order summary with product details, shipping, and crypto totals if applicable.
 function populateOrderDetails() {
   const container = document.getElementById('order-details');
-  const order = JSON.parse(localStorage.getItem('order'));
+  let order = JSON.parse(localStorage.getItem('order'));
   if (order && container) {
     const quantity = parseFloat(order.quantity);
-    const shippingCost = (SHIPPING_COST_PER_ITEM * quantity).toFixed(2);
+    // Use the product-specific shipping cost already saved.
+    const shippingCost = order.shippingCost;
     const subtotal = parseFloat(order.total);
     const grandTotal = (subtotal + parseFloat(shippingCost)).toFixed(2);
     
+    // Determine payment method (from buyer details if available; otherwise default selection)
+    let paymentMethod = "";
+    if (order.buyer && order.buyer.paymentMethod) {
+      paymentMethod = order.buyer.paymentMethod;
+    } else {
+      paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+    }
+    
     let cryptoLine = "";
-    if (order.buyer && ['btc', 'monero', 'bnb', 'usdt', 'eth', 'doge'].includes(order.buyer.paymentMethod)) {
-      const rateEl = document.getElementById(order.buyer.paymentMethod + '-rate');
+    if (['btc', 'monero', 'bnb', 'usdt', 'eth', 'doge'].includes(paymentMethod)) {
+      const rateEl = document.getElementById(paymentMethod + '-rate');
       if (rateEl) {
         const rateText = rateEl.innerText;
         const usdRate = parseFloat(rateText.replace('$', ''));
         if (usdRate && grandTotal) {
           const cryptoTotal = (grandTotal / usdRate).toFixed(6);
-          cryptoLine = `<p><strong>Total in ${order.buyer.paymentMethod.toUpperCase()}:</strong> ${cryptoTotal}</p>`;
+          cryptoLine = `<p><strong>Total in ${paymentMethod.toUpperCase()}:</strong> ${cryptoTotal}</p>`;
           order.cryptoTotal = cryptoTotal;
         }
       }
     }
     
-    // Save updated order with shipping and grand total.
-    order.shippingCost = shippingCost;
+    // Update the order with shipping and grand total.
     order.grandTotal = grandTotal;
     localStorage.setItem('order', JSON.stringify(order));
     
@@ -132,7 +113,6 @@ function populateOrderDetails() {
   }
 }
 
-// Fetch live crypto conversion rates from Coingecko.
 function fetchCryptoRates() {
   fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,monero,binancecoin,tether,ethereum,dogecoin&vs_currencies=usd')
     .then(response => response.json())
@@ -147,18 +127,15 @@ function fetchCryptoRates() {
     .catch(error => console.error('Error fetching crypto rates:', error));
 }
 
-// Generate a random order number.
+// ----- FORM HANDLING -----
 function generateOrderNumber() {
   return 'ORD-' + Math.floor(Math.random() * 1000000);
 }
 
-// ----- PAYMENT AND FORM HANDLING -----
-
-// Handle purchase submission on the checkout page.
 function handlePurchase(event) {
   event.preventDefault();
   
-  const order = JSON.parse(localStorage.getItem('order'));
+  let order = JSON.parse(localStorage.getItem('order'));
   if (!order) {
     alert('No order details found.');
     return;
@@ -175,7 +152,7 @@ function handlePurchase(event) {
   
   // Recalculate shipping and grand total.
   const quantity = parseFloat(order.quantity);
-  const shippingCost = (SHIPPING_COST_PER_ITEM * quantity).toFixed(2);
+  const shippingCost = (parseFloat(order.shippingCost)).toFixed(2);
   const subtotal = parseFloat(order.total);
   const grandTotal = (subtotal + parseFloat(shippingCost)).toFixed(2);
   
@@ -192,7 +169,7 @@ function handlePurchase(event) {
     }
   }
   
-  // Build complete order data including shipping, grand total, and crypto total.
+  // Build complete order data.
   const orderData = {
     orderNumber: generateOrderNumber(),
     product: order,
@@ -202,7 +179,7 @@ function handlePurchase(event) {
     cryptoTotal: cryptoTotal
   };
   
-  // Send order data to the server endpoint.
+  // Send order data to the server.
   fetch('https://gueroshop.onrender.com/api/order', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -217,7 +194,6 @@ function handlePurchase(event) {
     .catch(error => console.error('Error processing order:', error));
 }
 
-// Handle contact form submission.
 function sendContactMessage(event) {
   event.preventDefault();
   const contactData = {
@@ -239,37 +215,29 @@ function sendContactMessage(event) {
     .catch(error => console.error('Error processing contact message:', error));
 }
 
-// Update payment instructions based on selected payment method.
 function updatePaymentInstructions() {
   const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
   const instructionsEl = document.getElementById('payment-instructions');
-  let instructionsText = '';
-
-  if (paymentInstructions[paymentMethod]) {
-    instructionsText = paymentInstructions[paymentMethod];
-  }
+  let instructionsText = paymentInstructions[paymentMethod] || '';
   instructionsEl.innerText = instructionsText;
 }
 
-// Attach event listeners to payment radio buttons.
+// ----- EVENT LISTENERS -----
 document.querySelectorAll('input[name="payment"]').forEach(radio => {
   radio.addEventListener('change', () => {
     updatePaymentInstructions();
-    populateOrderDetails(); // Recalculate order summary when payment method changes.
+    populateOrderDetails();
   });
 });
 
-// Initialize payment instructions on page load.
 if (document.getElementById('payment-instructions')) {
   updatePaymentInstructions();
 }
 
-// On index page, populate products.
 if (document.querySelector('.products')) {
   populateProducts();
 }
 
-// On checkout page, populate order details and fetch crypto rates.
 if (document.getElementById('order-details')) {
   populateOrderDetails();
   fetchCryptoRates();
