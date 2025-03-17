@@ -20,8 +20,9 @@
   <main>
     <form id="checkout-form" onsubmit="handlePurchase(event)">
       <h2>Order Summary</h2>
-      <!-- This container will be updated by main.js with product details, shipping, and totals -->
-      <div id="order-details"></div>
+      <div id="order-details">
+        <!-- Order summary will be populated by main.js -->
+      </div>
       
       <h2>Shipping Information</h2>
       <label for="name">Full Name:</label>
@@ -67,7 +68,6 @@
         <label for="doge">Dogecoin (DOGE) - <span id="doge-rate"></span></label>
       </div>
       
-      <!-- Container for payment instructions -->
       <p id="payment-instructions"></p>
       
       <button type="submit">Purchase Now</button>
@@ -78,7 +78,6 @@
     <p>&copy; 2025 Guero's Shop</p>
   </footer>
   
-  <!-- Load main.js after all HTML elements -->
   <script src="js/main.js"></script>
 </body>
 </html>
