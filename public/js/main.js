@@ -1,6 +1,6 @@
 /* main.js */
 
-// Define your products with individually specified details (example for 20 items)
+// Define 20 products with individually specified details.
 const products = [
   { id: 1, name: "Item 1", description: "Description for item 1.", price: "11.00", image: "images/item1.png" },
   { id: 2, name: "Item 2", description: "Description for item 2.", price: "12.00", image: "images/item2.png" },
@@ -24,18 +24,16 @@ const products = [
   { id: 20, name: "Item 20", description: "Description for item 20.", price: "30.00", image: "images/item20.png" }
 ];
 
-// Function to dynamically populate products on index.html
+// Function to populate products on the index page.
 function populateProducts() {
-  const productsContainer = document.querySelector('.products');
-  if (!productsContainer) return;
-  
-  productsContainer.innerHTML = '';
+  const container = document.querySelector('.products');
+  if (!container) return;
+  container.innerHTML = '';
   products.forEach(product => {
-    const productDiv = document.createElement('div');
-    productDiv.className = 'product';
-    productDiv.id = `product-${product.id}`;
-    
-    productDiv.innerHTML = `
+    const prodDiv = document.createElement('div');
+    prodDiv.className = 'product';
+    prodDiv.id = `product-${product.id}`;
+    prodDiv.innerHTML = `
       <img src="${product.image}" alt="${product.name}">
       <h2>${product.name}</h2>
       <p>${product.description}</p>
@@ -43,17 +41,16 @@ function populateProducts() {
       <p>Quantity: <input type="number" id="qty-${product.id}" value="1" min="1"></p>
       <button onclick="buyNow(${product.id})">Buy Now</button>
     `;
-    
-    productsContainer.appendChild(productDiv);
+    container.appendChild(prodDiv);
   });
 }
 
-// Redirect to checkout page with selected product details
+// Function to save the selected product and redirect to checkout.
 function buyNow(productId) {
   const product = products.find(p => p.id === productId);
   if (product) {
     const quantity = document.getElementById(`qty-${product.id}`).value;
-    // Save order details in localStorage
+    // Save order details in localStorage; total is calculated in dollars.
     localStorage.setItem('order', JSON.stringify({
       productId: product.id,
       name: product.name,
@@ -65,12 +62,12 @@ function buyNow(productId) {
   }
 }
 
-// On checkout page, populate order summary if order exists in localStorage
+// On the checkout page, populate order summary from localStorage.
 function populateOrderDetails() {
-  const orderDetailsDiv = document.getElementById('order-details');
+  const container = document.getElementById('order-details');
   const order = JSON.parse(localStorage.getItem('order'));
-  if (order && orderDetailsDiv) {
-    orderDetailsDiv.innerHTML = `
+  if (order && container) {
+    container.innerHTML = `
       <p>Product: ${order.name}</p>
       <p>Price: $${order.price}</p>
       <p>Quantity: ${order.quantity}</p>
@@ -79,27 +76,37 @@ function populateOrderDetails() {
   }
 }
 
-// Function to fetch live crypto conversion rates using Coingecko API
+// Function to fetch live crypto conversion rates using the Coingecko API.
 function fetchCryptoRates() {
   fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,monero,binancecoin,tether,ethereum,dogecoin&vs_currencies=usd')
     .then(response => response.json())
     .then(data => {
-      document.getElementById('btc-rate').innerText = `$${data.bitcoin.usd}`;
-      document.getElementById('monero-rate').innerText = `$${data.monero.usd}`;
-      document.getElementById('bnb-rate').innerText = `$${data.binancecoin.usd}`;
-      document.getElementById('usdt-rate').innerText = `$${data.tether.usd}`;
-      document.getElementById('eth-rate').innerText = `$${data.ethereum.usd}`;
-      document.getElementById('doge-rate').innerText = `$${data.dogecoin.usd}`;
+      if (document.getElementById('btc-rate')) document.getElementById('btc-rate').innerText = `$${data.bitcoin.usd}`;
+      if (document.getElementById('monero-rate')) document.getElementById('monero-rate').innerText = `$${data.monero.usd}`;
+      if (document.getElementById('bnb-rate')) document.getElementById('bnb-rate').innerText = `$${data.binancecoin.usd}`;
+      if (document.getElementById('usdt-rate')) document.getElementById('usdt-rate').innerText = `$${data.tether.usd}`;
+      if (document.getElementById('eth-rate')) document.getElementById('eth-rate').innerText = `$${data.ethereum.usd}`;
+      if (document.getElementById('doge-rate')) document.getElementById('doge-rate').innerText = `$${data.dogecoin.usd}`;
     })
     .catch(error => console.error('Error fetching crypto rates:', error));
 }
 
-// Generate a random order number (for demo purposes)
+// Generate a random order number.
 function generateOrderNumber() {
   return 'ORD-' + Math.floor(Math.random() * 1000000);
 }
 
-// Handle purchase submission on checkout page
+// Mapping for crypto currency codes for display.
+const cryptoNames = {
+  btc: "BTC",
+  monero: "XMR",
+  bnb: "BNB",
+  usdt: "USDT",
+  eth: "ETH",
+  doge: "DOGE"
+};
+
+// Handle purchase submission on the checkout page.
 function handlePurchase(event) {
   event.preventDefault();
   
@@ -109,7 +116,7 @@ function handlePurchase(event) {
     return;
   }
   
-  // Collect buyer details from the form
+  // Collect buyer details from the form.
   const buyer = {
     name: document.getElementById('name').value,
     email: document.getElementById('email').value,
@@ -117,64 +124,68 @@ function handlePurchase(event) {
     address: document.getElementById('address').value,
     paymentMethod: document.querySelector('input[name="payment"]:checked').value
   };
+
+  // Calculate crypto total if a crypto payment method is selected.
+  let cryptoTotal = null;
+  if (['btc', 'monero', 'bnb', 'usdt', 'eth', 'doge'].includes(buyer.paymentMethod)) {
+    const rateElement = document.getElementById(buyer.paymentMethod + '-rate');
+    if (rateElement) {
+      const rateText = rateElement.innerText; // e.g. "$40000"
+      const usdRate = parseFloat(rateText.replace('$',''));
+      const dollarTotal = parseFloat(order.total);
+      if (usdRate && dollarTotal) {
+        cryptoTotal = (dollarTotal / usdRate).toFixed(6); // 6 decimals for crypto value
+      }
+    }
+  }
   
-  // Create order number
-  const orderNumber = generateOrderNumber();
-  
-  // Build complete order data
+  // Build complete order data, including crypto total if applicable.
   const orderData = {
-    orderNumber: orderNumber,
+    orderNumber: generateOrderNumber(),
     product: order,
-    buyer: buyer
+    buyer: buyer,
+    cryptoTotal: cryptoTotal // null if not applicable
   };
-  
-  // Send orderData to your server endpoint using absolute URL.
+
+  // Send the order data to your server endpoint.
   fetch('https://gueroshop.onrender.com/api/order', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(orderData)
   })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Order processed:', data);
-    // Save the complete order data so the confirmation page can display it
-    localStorage.setItem('order', JSON.stringify(orderData));
-    // Redirect to the confirmation page
-    window.location.href = 'confirmation.html';
-  })
-  .catch(error => console.error('Error processing order:', error));
+    .then(response => response.json())
+    .then(data => {
+      console.log('Order processed:', data);
+      // Save the complete order data (including crypto total) for the confirmation page.
+      localStorage.setItem('order', JSON.stringify(orderData));
+      window.location.href = 'confirmation.html';
+    })
+    .catch(error => console.error('Error processing order:', error));
 }
 
-// Handle contact form submission on contact.html
+// Handle contact form submission.
 function sendContactMessage(event) {
   event.preventDefault();
-  
   const contactData = {
     name: document.getElementById('contact-name').value,
     email: document.getElementById('contact-email').value,
     message: document.getElementById('contact-message').value
   };
-  
-  // Send contactData to your server endpoint using absolute URL.
   fetch('https://gueroshop.onrender.com/api/contact', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(contactData)
   })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Contact message processed:', data);
-    alert('Your message has been sent. We will get back to you soon.');
-    document.getElementById('contact-form').reset();
-  })
-  .catch(error => console.error('Error processing contact message:', error));
+    .then(response => response.json())
+    .then(data => {
+      console.log('Contact message processed:', data);
+      alert('Your message has been sent. We will get back to you soon.');
+      document.getElementById('contact-form').reset();
+    })
+    .catch(error => console.error('Error processing contact message:', error));
 }
 
-// Update payment instructions based on selected payment method
+// Update payment instructions based on selected payment method.
 function updatePaymentInstructions() {
   const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
   const instructionsEl = document.getElementById('payment-instructions');
@@ -208,22 +219,22 @@ function updatePaymentInstructions() {
   instructionsEl.innerText = instructionsText;
 }
 
-// Attach event listeners to payment radio buttons
+// Attach event listeners to payment radio buttons for updating instructions.
 document.querySelectorAll('input[name="payment"]').forEach(radio => {
   radio.addEventListener('change', updatePaymentInstructions);
 });
 
-// Call updatePaymentInstructions initially if element exists
-if(document.getElementById('payment-instructions')) {
+// Initialize payment instructions on page load.
+if (document.getElementById('payment-instructions')) {
   updatePaymentInstructions();
 }
 
-// If on index page, populate products
+// On index page, populate products.
 if (document.querySelector('.products')) {
   populateProducts();
 }
 
-// If on checkout page, populate order details and fetch crypto rates
+// On checkout page, populate order details and fetch crypto rates.
 if (document.getElementById('order-details')) {
   populateOrderDetails();
   fetchCryptoRates();
