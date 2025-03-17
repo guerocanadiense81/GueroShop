@@ -21,7 +21,7 @@
     <form id="checkout-form" onsubmit="handlePurchase(event)">
       <h2>Order Summary</h2>
       <div id="order-details">
-        <!-- Order summary will be populated here -->
+        <!-- Order summary will be populated via main.js -->
       </div>
       
       <h2>Shipping Information</h2>
@@ -78,54 +78,6 @@
     <p>&copy; 2025 Guero's Shop</p>
   </footer>
   
-  <!-- Include the main.js file which handles rate fetching and form processing -->
   <script src="js/main.js"></script>
-  
-  <!-- Inline script to update the order summary with crypto total -->
-  <script>
-    // Function to update order summary with crypto total below USD total.
-    function updateOrderSummary() {
-      const order = JSON.parse(localStorage.getItem('order'));
-      if (!order) return;
-      
-      // Get the currently selected payment method.
-      const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-      let cryptoLine = '';
-      
-      // If a crypto method is selected, calculate the crypto equivalent.
-      if (['btc', 'monero', 'bnb', 'usdt', 'eth', 'doge'].includes(paymentMethod)) {
-        const rateElement = document.getElementById(paymentMethod + '-rate');
-        if (rateElement) {
-          const rateText = rateElement.innerText; // e.g., "$40000"
-          const usdRate = parseFloat(rateText.replace('$', ''));
-          const dollarTotal = parseFloat(order.total);
-          if (usdRate && dollarTotal) {
-            const cryptoTotal = (dollarTotal / usdRate).toFixed(6);
-            cryptoLine = `<p><strong>Total in ${paymentMethod.toUpperCase()}:</strong> ${cryptoTotal}</p>`;
-            // Optionally update the order object
-            order.cryptoTotal = cryptoTotal;
-            localStorage.setItem('order', JSON.stringify(order));
-          }
-        }
-      }
-      
-      // Display the order details along with the crypto total (if any).
-      document.getElementById('order-details').innerHTML = `
-        <p><strong>Product:</strong> ${order.name}</p>
-        <p><strong>Price (USD):</strong> $${order.price}</p>
-        <p><strong>Quantity:</strong> ${order.quantity}</p>
-        <p><strong>Total (USD):</strong> $${order.total}</p>
-        ${cryptoLine}
-      `;
-    }
-    
-    // Call updateOrderSummary on page load.
-    updateOrderSummary();
-    
-    // Update order summary whenever a payment method is changed.
-    document.querySelectorAll('input[name="payment"]').forEach(radio => {
-      radio.addEventListener('change', updateOrderSummary);
-    });
-  </script>
 </body>
 </html>
