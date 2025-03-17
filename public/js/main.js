@@ -1,6 +1,7 @@
 /* main.js */
 
-// Define 20 products with individually specified details, including a shippingCost for each.
+// ----- PRODUCTS & GLOBAL SETTINGS -----
+// Each product now includes its own shippingCost (placeholder values).
 const products = [
   { id: 1, name: "Item 1", description: "Description for item 1.", price: "11.00", image: "images/item1.png", shippingCost: 3.00 },
   { id: 2, name: "Item 2", description: "Description for item 2.", price: "12.00", image: "images/item2.png", shippingCost: 4.00 },
@@ -51,7 +52,7 @@ function buyNow(productId) {
   if (product) {
     const quantity = document.getElementById(`qty-${product.id}`).value;
     const subtotal = (product.price * quantity).toFixed(2);
-    // Save order details in localStorage. (Note: buyer details not yet set)
+    // Save order details in localStorage with the product-specific shipping cost.
     localStorage.setItem('order', JSON.stringify({
       productId: product.id,
       name: product.name,
@@ -65,17 +66,18 @@ function buyNow(productId) {
 }
 
 // ----- CHECKOUT PAGE FUNCTIONS -----
+// Populate order details including shipping and grand total (and crypto total if applicable).
 function populateOrderDetails() {
   const container = document.getElementById('order-details');
   let order = JSON.parse(localStorage.getItem('order'));
   if (order && container) {
     const quantity = parseFloat(order.quantity);
-    // Use the product-specific shipping cost already saved.
+    // Use the shippingCost already stored in order.
     const shippingCost = order.shippingCost;
     const subtotal = parseFloat(order.total);
     const grandTotal = (subtotal + parseFloat(shippingCost)).toFixed(2);
     
-    // Determine payment method (from buyer details if available; otherwise default selection)
+    // Determine payment method either from stored buyer data or the current selection.
     let paymentMethod = "";
     if (order.buyer && order.buyer.paymentMethod) {
       paymentMethod = order.buyer.paymentMethod;
@@ -87,7 +89,7 @@ function populateOrderDetails() {
     if (['btc', 'monero', 'bnb', 'usdt', 'eth', 'doge'].includes(paymentMethod)) {
       const rateEl = document.getElementById(paymentMethod + '-rate');
       if (rateEl) {
-        const rateText = rateEl.innerText;
+        const rateText = rateEl.innerText; // e.g., "$40000"
         const usdRate = parseFloat(rateText.replace('$', ''));
         if (usdRate && grandTotal) {
           const cryptoTotal = (grandTotal / usdRate).toFixed(6);
@@ -97,7 +99,7 @@ function populateOrderDetails() {
       }
     }
     
-    // Update the order with shipping and grand total.
+    // Update order with grand total.
     order.grandTotal = grandTotal;
     localStorage.setItem('order', JSON.stringify(order));
     
@@ -141,7 +143,7 @@ function handlePurchase(event) {
     return;
   }
   
-  // Collect buyer details from the form.
+  // Collect buyer details.
   const buyer = {
     name: document.getElementById('name').value,
     email: document.getElementById('email').value,
@@ -152,11 +154,11 @@ function handlePurchase(event) {
   
   // Recalculate shipping and grand total.
   const quantity = parseFloat(order.quantity);
-  const shippingCost = (parseFloat(order.shippingCost)).toFixed(2);
+  const shippingCost = order.shippingCost; // Already stored from product selection.
   const subtotal = parseFloat(order.total);
   const grandTotal = (subtotal + parseFloat(shippingCost)).toFixed(2);
   
-  // Calculate crypto total if a crypto payment method is selected.
+  // Calculate crypto total if applicable.
   let cryptoTotal = null;
   if (['btc', 'monero', 'bnb', 'usdt', 'eth', 'doge'].includes(buyer.paymentMethod)) {
     const rateElement = document.getElementById(buyer.paymentMethod + '-rate');
