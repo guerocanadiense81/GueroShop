@@ -9,7 +9,6 @@
 <body>
   <header>
     <div class="logo">
-      <!-- Placeholder for your logo image -->
       <img src="images/logo-gueroshop.png" alt="Logo" />
     </div>
     <h1>Guero's Shop</h1>
@@ -23,20 +22,21 @@
   </header>
 
   <main>
+    <!-- Ensure this container exists so main.js can populate it -->
     <section class="products">
-      <!-- Products will be dynamically generated via JavaScript -->
+      <!-- Products will be populated here -->
     </section>
   </main>
 
   <footer>
-    <p>Follow us:</p>
-    <ul>
-      <li><a href="https://wa.me/yourwhatsappnumber" target="_blank">WhatsApp</a></li>
-      <li><a href="https://facebook.com/yourfacebookpage" target="_blank">Facebook</a></li>
-      <li><a href="https://instagram.com/yourinstagrampage" target="_blank">Instagram</a></li>
-    </ul>
+    <p>&copy; 2025 Guero's Shop</p>
   </footer>
 
+  <!-- Include the main.js file -->
   <script src="js/main.js"></script>
+  <script>
+    // Optionally, call populateProducts on page load for debugging:
+    populateProducts();
+  </script>
 </body>
 </html>
