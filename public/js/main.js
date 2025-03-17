@@ -1,6 +1,7 @@
 /* main.js */
 
 // ----- PRODUCTS & GLOBAL SETTINGS -----
+// Each product now includes its own shippingCost (USD placeholder).
 const products = [
   { id: 1, name: "Item 1", description: "Description for item 1.", price: "11.00", image: "images/item1.png", shippingCost: 3.00 },
   { id: 2, name: "Item 2", description: "Description for item 2.", price: "12.00", image: "images/item2.png", shippingCost: 4.00 },
@@ -23,6 +24,27 @@ const products = [
   { id: 19, name: "Item 19", description: "Description for item 19.", price: "29.00", image: "images/item19.png", shippingCost: 4.25 },
   { id: 20, name: "Item 20", description: "Description for item 20.", price: "30.00", image: "images/item20.png", shippingCost: 3.75 }
 ];
+
+// Mapping for crypto currency codes.
+const cryptoNames = {
+  btc: "BTC",
+  monero: "XMR",
+  bnb: "BNB",
+  usdt: "USDT",
+  eth: "ETH",
+  doge: "DOGE"
+};
+
+// Payment instructions for each method.
+const paymentInstructions = {
+  interac: "Send your payment via Interac Email Transfer to your-interac@example.com and include your order number in the message.",
+  btc: "Send your Bitcoin payment to YOUR_BITCOIN_ADDRESS_PLACEHOLDER.",
+  monero: "Send your Monero payment to YOUR_MONERO_ADDRESS_PLACEHOLDER.",
+  bnb: "Send your Binance Coin payment to YOUR_BNB_ADDRESS_PLACEHOLDER.",
+  usdt: "Send your Tether payment to YOUR_USDT_ADDRESS_PLACEHOLDER.",
+  eth: "Send your Ethereum payment to YOUR_ETH_ADDRESS_PLACEHOLDER.",
+  doge: "Send your Dogecoin payment to YOUR_DOGE_ADDRESS_PLACEHOLDER."
+};
 
 // ----- INDEX PAGE FUNCTIONS -----
 function populateProducts() {
@@ -51,7 +73,7 @@ function buyNow(productId) {
   if (product) {
     const quantity = document.getElementById(`qty-${product.id}`).value;
     const subtotal = (product.price * quantity).toFixed(2);
-    // Save order details in localStorage including product-specific shipping cost.
+    // Save order details including product-specific shipping.
     localStorage.setItem('order', JSON.stringify({
       productId: product.id,
       name: product.name,
@@ -65,16 +87,17 @@ function buyNow(productId) {
 }
 
 // ----- CHECKOUT PAGE FUNCTIONS -----
+// Populates the order summary on the checkout page.
 function populateOrderDetails() {
   const container = document.getElementById('order-details');
   let order = JSON.parse(localStorage.getItem('order'));
   if (order && container) {
     const quantity = parseFloat(order.quantity);
-    const shippingCost = order.shippingCost; // Stored from product selection.
+    const shippingCost = order.shippingCost; // Already stored.
     const subtotal = parseFloat(order.total);
     const grandTotal = (subtotal + parseFloat(shippingCost)).toFixed(2);
     
-    // Determine payment method from buyer data (if set) or current selection.
+    // Determine payment method: from stored buyer data or current selection.
     let paymentMethod = "";
     if (order.buyer && order.buyer.paymentMethod) {
       paymentMethod = order.buyer.paymentMethod;
@@ -83,7 +106,7 @@ function populateOrderDetails() {
     }
     
     let cryptoLine = "";
-    if (['btc', 'monero', 'bnb', 'usdt', 'eth', 'doge'].includes(paymentMethod)) {
+    if (['btc','monero','bnb','usdt','eth','doge'].includes(paymentMethod)) {
       const rateEl = document.getElementById(paymentMethod + '-rate');
       if (rateEl) {
         const rateText = rateEl.innerText; // e.g., "$40000"
@@ -111,6 +134,7 @@ function populateOrderDetails() {
   }
 }
 
+// Fetch live crypto rates from Coingecko.
 function fetchCryptoRates() {
   fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,monero,binancecoin,tether,ethereum,dogecoin&vs_currencies=usd')
     .then(response => response.json())
@@ -139,7 +163,7 @@ function handlePurchase(event) {
     return;
   }
   
-  // Collect buyer details from the form.
+  // Collect buyer details.
   const buyer = {
     name: document.getElementById('name').value,
     email: document.getElementById('email').value,
@@ -155,7 +179,7 @@ function handlePurchase(event) {
   const grandTotal = (subtotal + parseFloat(shippingCost)).toFixed(2);
   
   let cryptoTotal = null;
-  if (['btc', 'monero', 'bnb', 'usdt', 'eth', 'doge'].includes(buyer.paymentMethod)) {
+  if (['btc','monero','bnb','usdt','eth','doge'].includes(buyer.paymentMethod)) {
     const rateElement = document.getElementById(buyer.paymentMethod + '-rate');
     if (rateElement) {
       const rateText = rateElement.innerText;
@@ -175,6 +199,7 @@ function handlePurchase(event) {
     cryptoTotal: cryptoTotal
   };
   
+  // Send order data to the server.
   fetch('https://gueroshop.onrender.com/api/order', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -221,7 +246,7 @@ function updatePaymentInstructions() {
 document.querySelectorAll('input[name="payment"]').forEach(radio => {
   radio.addEventListener('change', () => {
     updatePaymentInstructions();
-    populateOrderDetails(); // Recalculate order summary when payment method changes.
+    populateOrderDetails();
   });
 });
 
