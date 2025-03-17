@@ -45,12 +45,12 @@ function populateProducts() {
   });
 }
 
-// Function to save the selected product and redirect to checkout.
+// Function to save selected product details and redirect to checkout.
 function buyNow(productId) {
   const product = products.find(p => p.id === productId);
   if (product) {
     const quantity = document.getElementById(`qty-${product.id}`).value;
-    // Save order details in localStorage; total is calculated in dollars.
+    // Save order details in localStorage (dollar total calculated here)
     localStorage.setItem('order', JSON.stringify({
       productId: product.id,
       name: product.name,
@@ -62,21 +62,40 @@ function buyNow(productId) {
   }
 }
 
-// On the checkout page, populate order summary from localStorage.
+// Function to populate the order summary on the checkout page.
+// If a crypto payment method is selected, recalc and display the crypto total.
 function populateOrderDetails() {
   const container = document.getElementById('order-details');
   const order = JSON.parse(localStorage.getItem('order'));
   if (order && container) {
+    let cryptoLine = '';
+    // Check if buyer payment method exists in order (set later) and if it is crypto.
+    if (order.buyer && ['btc', 'monero', 'bnb', 'usdt', 'eth', 'doge'].includes(order.buyer.paymentMethod)) {
+      const rateElement = document.getElementById(order.buyer.paymentMethod + '-rate');
+      if (rateElement) {
+        const rateText = rateElement.innerText; // e.g. "$40000"
+        const usdRate = parseFloat(rateText.replace('$', ''));
+        const dollarTotal = parseFloat(order.total);
+        if (usdRate && dollarTotal) {
+          const cryptoTotal = (dollarTotal / usdRate).toFixed(6);
+          cryptoLine = `<p><strong>Total in ${order.buyer.paymentMethod.toUpperCase()}:</strong> ${cryptoTotal}</p>`;
+          // Optionally, update the order object with cryptoTotal.
+          order.cryptoTotal = cryptoTotal;
+          localStorage.setItem('order', JSON.stringify(order));
+        }
+      }
+    }
     container.innerHTML = `
-      <p>Product: ${order.name}</p>
-      <p>Price: $${order.price}</p>
-      <p>Quantity: ${order.quantity}</p>
-      <p>Total: $${order.total}</p>
+      <p><strong>Product:</strong> ${order.name}</p>
+      <p><strong>Price (USD):</strong> $${order.price}</p>
+      <p><strong>Quantity:</strong> ${order.quantity}</p>
+      <p><strong>Total (USD):</strong> $${order.total}</p>
+      ${cryptoLine}
     `;
   }
 }
 
-// Function to fetch live crypto conversion rates using the Coingecko API.
+// Function to fetch live crypto conversion rates using Coingecko API.
 function fetchCryptoRates() {
   fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,monero,binancecoin,tether,ethereum,dogecoin&vs_currencies=usd')
     .then(response => response.json())
@@ -96,7 +115,7 @@ function generateOrderNumber() {
   return 'ORD-' + Math.floor(Math.random() * 1000000);
 }
 
-// Mapping for crypto currency codes for display.
+// Mapping for crypto currency codes.
 const cryptoNames = {
   btc: "BTC",
   monero: "XMR",
@@ -106,7 +125,7 @@ const cryptoNames = {
   doge: "DOGE"
 };
 
-// Handle purchase submission on the checkout page.
+// Handle purchase submission on checkout page.
 function handlePurchase(event) {
   event.preventDefault();
   
@@ -124,30 +143,30 @@ function handlePurchase(event) {
     address: document.getElementById('address').value,
     paymentMethod: document.querySelector('input[name="payment"]:checked').value
   };
-
+  
   // Calculate crypto total if a crypto payment method is selected.
   let cryptoTotal = null;
   if (['btc', 'monero', 'bnb', 'usdt', 'eth', 'doge'].includes(buyer.paymentMethod)) {
     const rateElement = document.getElementById(buyer.paymentMethod + '-rate');
     if (rateElement) {
       const rateText = rateElement.innerText; // e.g. "$40000"
-      const usdRate = parseFloat(rateText.replace('$',''));
+      const usdRate = parseFloat(rateText.replace('$', ''));
       const dollarTotal = parseFloat(order.total);
       if (usdRate && dollarTotal) {
-        cryptoTotal = (dollarTotal / usdRate).toFixed(6); // 6 decimals for crypto value
+        cryptoTotal = (dollarTotal / usdRate).toFixed(6);
       }
     }
   }
   
-  // Build complete order data, including crypto total if applicable.
+  // Build complete order data including crypto total.
   const orderData = {
     orderNumber: generateOrderNumber(),
     product: order,
     buyer: buyer,
-    cryptoTotal: cryptoTotal // null if not applicable
+    cryptoTotal: cryptoTotal // May be null if not applicable.
   };
-
-  // Send the order data to your server endpoint.
+  
+  // Send order data to server endpoint.
   fetch('https://gueroshop.onrender.com/api/order', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -156,7 +175,7 @@ function handlePurchase(event) {
     .then(response => response.json())
     .then(data => {
       console.log('Order processed:', data);
-      // Save the complete order data (including crypto total) for the confirmation page.
+      // Save complete order data (including crypto total) for confirmation page.
       localStorage.setItem('order', JSON.stringify(orderData));
       window.location.href = 'confirmation.html';
     })
@@ -219,7 +238,7 @@ function updatePaymentInstructions() {
   instructionsEl.innerText = instructionsText;
 }
 
-// Attach event listeners to payment radio buttons for updating instructions.
+// Attach event listeners to payment radio buttons.
 document.querySelectorAll('input[name="payment"]').forEach(radio => {
   radio.addEventListener('change', updatePaymentInstructions);
 });
