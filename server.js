@@ -71,7 +71,7 @@ Price: $${orderData.product.price}
 Quantity: ${orderData.product.quantity}
 Total: $${orderData.product.total}
 
-Buyer Details (to manually forward to):
+Buyer Details:
 Name: ${orderData.buyer.name}
 Email: ${orderData.buyer.email}
 Phone: ${orderData.buyer.phone}
