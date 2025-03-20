@@ -3,7 +3,10 @@
 // ----- PRODUCTS & GLOBAL SETTINGS -----
 // Each product now includes its own shippingCost (USD placeholder).
 const products = [
-  { id: 1, name: "Item 1", description: "Description for item 1.", price: "11.00", image: "images/item1.png", shippingCost: 3.00 },
+  { id: 1, name: "
+2PK Permanent Black Sharpie Markers", description: "2 markers per package
+Fine point
+Marks on most surfaces", price: "4.50", image: "images/sharpie_2pk.png", shippingCost: 2.50 },
   { id: 2, name: "Item 2", description: "Description for item 2.", price: "12.00", image: "images/item2.png", shippingCost: 4.00 },
   { id: 3, name: "Item 3", description: "Description for item 3.", price: "13.00", image: "images/item3.png", shippingCost: 3.50 },
   { id: 4, name: "Item 4", description: "Description for item 4.", price: "14.00", image: "images/item4.png", shippingCost: 5.00 },
